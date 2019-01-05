@@ -1,0 +1,53 @@
+<html>
+    <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="/static/js/web3.min.js"></script>
+    </head>
+    <body>
+        <button id="view">Click to View</button>
+        <div id="space"></div>
+
+        <script>
+            var beneficiary = '0x2Fb5450D46267983331b42e49430bBF7474dB6d8';
+            var distributor,contract;
+            function initWeb3(){
+                if (typeof web3 !== 'undefined') {
+                        provider = web3.currentProvider;
+                        provider.enable();
+                        web3 = new Web3(provider);
+                        web3.eth.getCoinbase((error,account)=>{
+                            distributor = account;
+                            initContract();
+                        });
+                }
+            }
+
+            function initContract(){
+                $.getJSON('/static/build/contracts/Commodity.json',function(output){
+                    abi = output.abi;
+                    contract = new web3.eth.Contract(abi,"0x88ba533e0b33f10b7153AF72479B1D095B89906a");
+                });
+            }
+
+            function getAllTransactions(){
+               
+            }
+
+            $(document).ready(function(){
+                initWeb3();
+
+                $("#view").click(function(){
+                    var entryCount;
+                    contract.methods.entryCount(beneficiary).call((error,res)=>{
+                        entryCount = res;
+                        for(var i = 0;i < entryCount;i++){
+                            contract.methods.beneficiaryData(beneficiary,i).call((error,res)=>{
+                                $("#space").append(res[4]);
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

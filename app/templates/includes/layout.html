@@ -65,7 +65,25 @@
             });
 
             $("#confirmButton").click(function () {
-                performTransaction();
+                $.get("/sendOtp",function(data,status){
+                    //console.log(data);
+                });
+                //performTransaction();
+            });
+
+            $("#submitOtp").click(function(){
+                var otp = $("#inputOtp").val();
+                 $.get("/verifyOtp/"+otp,function(data,status){
+                    //console.log(data);
+                    if(data === "True"){
+                        //$('#exampleModal').modal('hide');
+                        //$("#exampleModal").hide();
+                        performTransaction();
+                    }
+                    else{
+
+                    }
+                });
             });
 
         });
@@ -115,7 +133,7 @@
             var riceAmount = parseInt($("#riceQuantity").val());
             var wheatAmount = parseInt($("#wheatQuantity").val());
             var coarseAmount = parseInt($("#coarseQuantity").val());
-            contract.methods.sell(beneficiary, riceAmount, wheatAmount, coarseAmount).send({
+            contract.methods.sell(beneficiary,"0x01","0x123456",riceAmount, wheatAmount, coarseAmount).send({
                 from: distributor
             });
             $("#status").hide();
