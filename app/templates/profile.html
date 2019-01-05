@@ -1,0 +1,87 @@
+{% extends 'includes/layout.html' %}
+
+
+{% block body %}
+
+<div class="sidebar">
+    <a href="/">Home</a>
+    <a href="/stock">Stock</a>
+    <a class="active" href="/profile">Profile</a>
+    <a href="">Check Usage</a>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="card p-3 mt-5 mx-auto">
+            <div class="card-body">
+                <h2 class="text-center mb-5 text-dark">PROFILE</h2>
+
+                <div class="row">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Details</th>
+                                <th scope="col">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Aadhaar Number</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input class="form-control quantity" type="text" id="shopNumber" name="shopNumber" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Category</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1" align="right"></td>
+                                <td colspan="1">
+                                    <a class="btn button button-3d nomargin" id="" href="/">Back to Home</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
