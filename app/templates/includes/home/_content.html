@@ -14,11 +14,18 @@
 
             <div class="clearfix">
                 <div class="divcenter col_two_third">
-                    <label for="template-contactform-subject">Aadhar Number<small> * </small></label>
-                    <input type="text" id="template-contactform-subject" name="template-contactform-subject" value=""
-                        class="required sm-form-control" aria-required="true">
-                </div>
 
+                    <form id="aadhaarForm" method="post" class="form-horizontal">
+                        <label for="template-contactform-subject">Aadhar Number<small> * </small></label>
+                        <input type="text" id="template-contactform-subject" name="template-contactform-subject" value=""
+                            class="required sm-form-control" aria-required="true">
+
+                        <div class="col_full text-center" style="margin-top:35px;">
+                            <a class="button button-3d nomargin" type="submit" id="template-contactform-submit" href="/stock"
+                                name="continueButton" value="submit">Continue</a>
+                        </div>
+                    </form>
+                </div>
             </div>
 
 
