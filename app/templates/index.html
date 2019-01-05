@@ -5,56 +5,77 @@
 
 
 
+<div class="container">
+	<div class="row">
+		<div class="card p-3 mt-5 mx-auto">
+			<div class="card-body">
+				<h2 class="text-center mb-5 text-dark">STOCK</h2>
 
+				<h3 class="font-weight-light" id="status">Rice:<span id="rice"></span> kg Wheat:<span id="wheat"></span> kg Coarse:<span
+					 id="coarse"></span>
+					kg</h3>
 
-
-<h3 id="refresh">Refreshing...</h3>
-<h3 id="status">Rice:<span id="rice"></span> kg Wheat:<span id="wheat"></span> kg Coarse:<span id="coarse"></span> kg</h3>
-
-
-
-
-
-
-<form>
-	<table>
-		<thead>
-			<tr>
-				<th>Food Grain</th>
-				<th>Cost/kg</th>
-				<th>Quantity(kg)</th>
-				<th>Total Cost</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Rice</td>
-				<td>3</td>
-				<td><input type="text" id="riceQuantity" class="quantity" name="riceQuantity" /></td>
-				<td id="riceTotalCost">0</td>
-			</tr>
-			<tr>
-				<td>Wheat</td>
-				<td>2</td>
-				<td><input type="number" id="wheatQuantity" name="wheatQuantity" class="quantity" /></td>
-				<td id="wheatTotalCost">0</td>
-			</tr>
-			<tr>
-				<td>Coarse</td>
-				<td>1</td>
-				<td><input type="number" id="coarseQuantity" name="coarseQuantity" class="quantity" /></td>
-				<td id="coarseTotalCost">0</td>
-			</tr>
-			<tr>
-				<td colSpan="3" align="right">Grand Total</td>
-				<td id="grandTotal"></td>
-			</tr>
-			<tr>
-				<td colspan="4"><input type="button" value="Confirm" id="confirmButton" /></td>
-			</tr>
-		</tbody>
-	</table>
-</form>
-
+				<div class="row">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Food Grain</th>
+								<th scope="col">Cost / KG</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Total Cost</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">1</th>
+								<td>Rice</td>
+								<td>3</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control" type="text" id="riceQuantity" class="quantity" name="riceQuantity" />
+									</div>
+								</td>
+								<td id="riceTotalCost">0</td>
+							</tr>
+							<tr>
+								<th scope="row">2</th>
+								<td>Wheat</td>
+								<td>2</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control" type="number" id="wheatQuantity" name="wheatQuantity" class="quantity" />
+									</div>
+								</td>
+								<td id="wheatTotalCost">0</td>
+							</tr>
+							<tr>
+								<th scope="row">3</th>
+								<td>Coarse</td>
+								<td>1</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control" type="number" id="coarseQuantity" name="coarseQuantity" class="quantity" />
+									</div>
+								</td>
+								<td id="coarseTotalCost">0</td>
+							</tr>
+							<tr>
+								<td colspan="4" align="right">Grand Total</td>
+								<td id="grandTotal" class="quantity">0</td>
+							</tr>
+							<tr>
+								<td colspan="4" align="right"></td>
+								<td colspan="4">
+									<input class="btn btn-primary" type="button" value="Confirm" id="confirmButton" />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
