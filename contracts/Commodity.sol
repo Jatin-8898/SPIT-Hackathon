@@ -26,7 +26,8 @@ contract Commodity {
   struct BeneficiaryData{
     address beneficiary;
     address distributor;
-	bytes1 date;
+	  bytes1 date;
+	  bytes3 monthYear;
     uint rice;
     uint wheat;
     uint coarse;
@@ -34,12 +35,11 @@ contract Commodity {
   
   mapping(address => FoodGrains) public distributors;
 
-  mapping(uint => address) addressIndices;
-  mapping(address => mapping(bytes3 => BeneficiaryData)) public beneficiaryData;
+  mapping(address => uint) public entryCount;
+  mapping(address => BeneficiaryData[]) public beneficiaryData;
   uint addressCount;
 
   constructor() public {
-	addressCount = 0;
     admin = msg.sender;
   }
 
@@ -69,11 +69,20 @@ contract Commodity {
 
     distributors[msg.sender] = FoodGrains(newRice,newWheat,newCoarse);
 
-	
-    beneficiaryData[beneficiaryId][monthYear] = BeneficiaryData(beneficiaryId,msg.sender,date,rice,wheat,coarse);
-	
+    beneficiaryData[beneficiaryId].push(BeneficiaryData(beneficiaryId,msg.sender,date,monthYear,rice,wheat,coarse));
+	entryCount[beneficiaryId]++;
+
 	emit BufferStatusChanged(msg.sender,newRice,newWheat,newCoarse);
     emit Sold(beneficiaryId,rice,wheat,coarse);
   }
+
+  function getAllTransactions(address beneficiaryId) public view returns (address[] memory){
+	  address[] memory addresses = new address[](entryCount[beneficiaryId]);
+	  for(uint i = 0;i < entryCount[beneficiaryId];i++){
+		  BeneficiaryData storage data = beneficiaryData[beneficiaryId][i];
+		  addresses[i] = data.beneficiary;
+	  }
+	  return (addresses);
+  } 
 
 }
