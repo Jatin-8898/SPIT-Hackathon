@@ -1,133 +1,110 @@
 {% extends 'includes/layout.html' %}
 
 
-	
+
 {% block body %}
 
+<!-- {% include 'includes/sidebar/_sidebar.html' %} -->
+<div class="sidebar">
+	<a class="" href="/">Home</a>
+	<a class="active" href="/">Stock</a>
+	<a href="">Profile</a>
+	<a href="">Check Usage</a>
+</div>
+<div class="content">
+	<div class="container">
+		<div class="row">
+			<div class="card p-3 mt-5 mx-auto">
+				<div class="card-body">
+					<h2 class="text-center mb-5 text-dark">STOCK</h2>
 
 
-<div id="wrapper" class="clearfix">
-
-		<!-- Header
-				============================================= -->
-		<header id="header" class="full-header">
-	
-			<div id="header-wrap">
-	
-				<div class="container clearfix">
-	
-					<div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
-	
-					<!-- Logo============================================= -->
-					<div id="logo">
-						<a href="/" class="standard-logo" data-dark-logo="/static/images/logo-dark.png"><img src="/static/images/logo.png"
-							 alt="Canvas Logo"></a>
-						<a href="/" class="retina-logo" data-dark-logo="/static/images/logo-dark@2x.png"><img src="/static/images/logo@2x.png"
-							 alt="Canvas Logo"></a>
-					</div>
-					<!-- #logo end -->
-	
-					<!-- NAVBAR -->
-					{% include 'includes/home/_navbar.html' %}
-					<!-- NAVBAR -->
-	
-				</div>
-			</div>
-		</header>
-	</div>	
-
-
-<div class="container">
-	<div class="row">
-		<div class="card p-3 mt-5 mx-auto">
-			<div class="card-body">
-				<h2 class="text-center mb-5 text-dark">STOCK</h2>
-
-
-				<div class="clearfix ml-5">
-					<div class="card text-white bg-secondary mb-3 float-left  m-3 p-2" style="max-width: 20rem;">
-						<div class="card-body">
-							<h5 class="card-title">Rice </h5>
-							<span class="card-text" id="rice"></span>
-							<span>KG</span>
+					<div class="clearfix ml-5">
+						<div class="card text-white bg-secondary mb-3 float-left  m-3 p-2" style="max-width: 20rem;">
+							<div class="card-body">
+								<h5 class="card-title">Rice </h5>
+								<span class="card-text" id="rice"></span>
+								<span>KG</span>
+							</div>
 						</div>
-					</div>
-					<div class="card text-white bg-secondary mb-3 float-left m-3 p-2" style="max-width: 20rem;">
-						<div class="card-body">
-							<h5 class="card-title">Wheat</h5>
-							<span class="card-text" id="wheat"></span>
-							<span>KG</span>
+						<div class="card text-white bg-secondary mb-3 float-left m-3 p-2" style="max-width: 20rem;">
+							<div class="card-body">
+								<h5 class="card-title">Wheat</h5>
+								<span class="card-text" id="wheat"></span>
+								<span>KG</span>
 
+							</div>
 						</div>
-					</div>
-					<div class="card text-white bg-secondary mb-3 float-left m-3 p-2" style="max-width:20rem;">
-						<div class="card-body">
-							<h5 class="card-title">Coarse</h5>
-							<span class="card-text" id="coarse"></span>
-							<span>KG</span>
+						<div class="card text-white bg-secondary mb-3 float-left m-3 p-2" style="max-width:20rem;">
+							<div class="card-body">
+								<h5 class="card-title">Coarse</h5>
+								<span class="card-text" id="coarse"></span>
+								<span>KG</span>
+							</div>
 						</div>
+
+
 					</div>
 
-
-				</div>
-
-				<div class="row">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">#</th>
-								<th scope="col">Food Grain</th>
-								<th scope="col">Cost / KG</th>
-								<th scope="col">Quantity</th>
-								<th scope="col">Total Cost</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th scope="row">1</th>
-								<td>Rice</td>
-								<td>3</td>
-								<td>
-									<div class="form-group">
-										<input class="form-control quantity" type="text" id="riceQuantity" name="riceQuantity" />
-									</div>
-								</td>
-								<td id="riceTotalCost">0</td>
-							</tr>
-							<tr>
-								<th scope="row">2</th>
-								<td>Wheat</td>
-								<td>2</td>
-								<td>
-									<div class="form-group">
-										<input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
-									</div>
-								</td>
-								<td id="wheatTotalCost">0</td>
-							</tr>
-							<tr>
-								<th scope="row">3</th>
-								<td>Coarse</td>
-								<td>1</td>
-								<td>
-									<div class="form-group">
-										<input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" />
-									</div>
-								</td>
-								<td id="coarseTotalCost">0</td>
-							</tr>
-							<tr>
-								<td colspan="4" align="right">Grand Total</td>
-								<td id="grandTotal">0</td>
-							</tr>
-							<tr>
-								<td colspan="4" align="right"></td>
-								<td colspan="4">
-									<input class="btn  button button-3d nomargin" type="button" value="Purchase" id="confirmButton" data-toggle="modal" data-target="#exampleModal" />
-								</td>
-							</tr>
-						</tbody>
-					</table>
+					<div class="row">
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">#</th>
+									<th scope="col">Food Grain</th>
+									<th scope="col">Cost / KG</th>
+									<th scope="col">Quantity</th>
+									<th scope="col">Total Cost</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td>Rice</td>
+									<td>3</td>
+									<td>
+										<div class="form-group">
+											<input class="form-control quantity" type="text" id="riceQuantity" name="riceQuantity" />
+										</div>
+									</td>
+									<td id="riceTotalCost">0</td>
+								</tr>
+								<tr>
+									<th scope="row">2</th>
+									<td>Wheat</td>
+									<td>2</td>
+									<td>
+										<div class="form-group">
+											<input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
+										</div>
+									</td>
+									<td id="wheatTotalCost">0</td>
+								</tr>
+								<tr>
+									<th scope="row">3</th>
+									<td>Coarse</td>
+									<td>1</td>
+									<td>
+										<div class="form-group">
+											<input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" />
+										</div>
+									</td>
+									<td id="coarseTotalCost">0</td>
+								</tr>
+								<tr>
+									<td colspan="4" align="right">Grand Total</td>
+									<td id="grandTotal">0</td>
+								</tr>
+								<tr>
+									<td colspan="4" align="right"></td>
+									<td colspan="4">
+										<input class="btn  button button-3d nomargin" type="button" value="Purchase" id="confirmButton" data-toggle="modal"
+										 data-target="#exampleModal" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
