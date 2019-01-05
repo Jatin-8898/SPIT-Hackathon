@@ -15,7 +15,6 @@ def getUsage():
 
 @app.route("/sendOtp")
 def sendOtp():
-    session['currentUser'] = "592036400388"
     beneficiary = Aadhaar.query.get(session['currentUser'])
 
     otp = totp.now()
@@ -34,9 +33,10 @@ def verifyOtp(otp):
         return "False"
 
 
-@app.route("/stock")
-def stock():
-    return render_template("stock.html")
+@app.route("/stock/<string:aadhaarNo>")
+def stock(aadhaarNo):
+	session['currentUser'] = aadhaarNo
+	return render_template("stock.html")
 
 
 @app.route("/supplier")

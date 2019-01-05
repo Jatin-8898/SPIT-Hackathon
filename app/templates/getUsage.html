@@ -5,7 +5,22 @@
     </head>
     <body>
         <button id="view">Click to View</button>
-        <div id="space"></div>
+        <div id="space">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Rice</th>
+                    <th>Wheat</th>
+                    <th>Coarse</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                
+            </tbody>
+
+        </table>
+        </div>
 
         <script>
             var beneficiary = '0x2Fb5450D46267983331b42e49430bBF7474dB6d8';
@@ -29,8 +44,10 @@
                 });
             }
 
-            function getAllTransactions(){
-               
+            function hexToBytes(hex) {
+                for (var bytes = [], c = 0; c < hex.length; c += 2)
+                    bytes.push(parseInt(hex.substr(c, 2), 16));
+                return bytes;
             }
 
             $(document).ready(function(){
@@ -42,7 +59,10 @@
                         entryCount = res;
                         for(var i = 0;i < entryCount;i++){
                             contract.methods.beneficiaryData(beneficiary,i).call((error,res)=>{
-                                $("#space").append(res[4]);
+                                var date = parseInt(res[2],16);
+                                var bytes = hexToBytes(res[3].substring(2,8));
+                                var trElement = "<tr><td>"+date+"-"+bytes[0]+"-"+bytes[1]+""+bytes[2]+"</td><td>"+res[4]+"</td><td>"+res[5]+"</td><td>"+res[6]+"</td></tr>";
+                                $("#tbody").append(trElement);
                             });
                         }
                     });

@@ -69,11 +69,11 @@
 
             $("#confirmButton").click(function () {
                 $.get("/sendOtp",function(data,status){
-                    //console.log(data);
+                    console.log(data);
                 });
                 //performTransaction();
             });
-
+        
             $("#submitOtp").click(function(){
                 var otp = $("#inputOtp").val();
                  $.get("/verifyOtp/"+otp,function(data,status){
