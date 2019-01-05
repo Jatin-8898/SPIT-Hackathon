@@ -12,7 +12,7 @@ def getUsage():
 
 @app.route("/sendOtp")
 def sendOtp():
-	session['currentUser'] = "123456789012"
+	session['currentUser'] = "592036400388"
 	beneficiary = Aadhaar.query.get(session['currentUser'])
 
 	otp = totp.now()
@@ -20,7 +20,7 @@ def sendOtp():
 	string = "{phone_no:"+beneficiary.mobileNo+",OTP:"+otp+"}"
 	stringToSend = ((string)+"\n")
 	sock.send(stringToSend.encode())
-	return stringToSend
+	return "True"
 
 @app.route("/verifyOtp/<string:otp>")
 def verifyOtp(otp):

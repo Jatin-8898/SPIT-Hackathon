@@ -70,7 +70,7 @@
                 });
                 //performTransaction();
             });
-
+        
             $("#submitOtp").click(function(){
                 var otp = $("#inputOtp").val();
                  $.get("/verifyOtp/"+otp,function(data,status){

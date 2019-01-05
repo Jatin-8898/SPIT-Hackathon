@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-HOST = "192.168.43.153"
+HOST = "192.168.43.223"
 PORT = 6000
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
