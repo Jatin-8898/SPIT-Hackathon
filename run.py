@@ -1,11 +1,16 @@
 from app import app, totp, sock
 from app.models import Aadhaar
-from flask import render_template, session
+from flask import render_template, session,request,url_for,redirect
 
 
-@app.route("/")
+@app.route("/",methods=['GET','POST'])
 def index():
-    return render_template("index.html")
+	if(request.method == "POST"):
+		aadhaarNo = request.form['aadhaarNo']
+		session['currentUser'] = aadhaarNo
+		return redirect(url_for('stock'))
+		
+	return render_template("index.html")
 
 
 @app.route("/getUsage")
@@ -33,9 +38,8 @@ def verifyOtp(otp):
         return "False"
 
 
-@app.route("/stock/<string:aadhaarNo>")
-def stock(aadhaarNo):
-	session['currentUser'] = aadhaarNo
+@app.route("/stock")
+def stock():
 	return render_template("stock.html")
 
 
