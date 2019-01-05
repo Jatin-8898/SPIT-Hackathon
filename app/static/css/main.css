@@ -3,3 +3,35 @@ body {
     /*     background: linear-gradient(to right, #ffe259, #ffa751);
  */
 }
+
+.button.button-3d {
+    border-radius: 3px;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.15);
+    -webkit-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+.button {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    white-space: nowrap;
+    margin: 5px;
+    padding: 0 22px;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #FF3366;
+    color: #FFF;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.nomargin {
+    margin: 0 !important;
+}
