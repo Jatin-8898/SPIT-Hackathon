@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="/static/js/web3.min.js"></script>
+</head>
+<body>
+<h3 id="refresh">Refreshing...</h3>
+<h3 id="status">Rice:<span id="rice"></span> kg Wheat:<span id="wheat"></span> kg Coarse:<span id="coarse"></span> kg</h3>
+
+<form>
+    <table>
+        <thead>
+        <tr>
+        <th>Food Grain</th>
+        <th>Cost/kg</th>
+        <th>Quantity(kg)</th>
+        <th>Total Cost</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Rice</td>
+            <td>3</td>
+            <td><input type="text" id="riceQuantity" class="quantity" name="riceQuantity" /></td>
+            <td id="riceTotalCost">0</td>
+        </tr>
+        <tr>
+            <td>Wheat</td>
+            <td>2</td>
+            <td><input type="number" id="wheatQuantity" name="wheatQuantity" class="quantity" /></td>
+            <td id="wheatTotalCost">0</td>
+        </tr>
+        <tr>
+            <td>Coarse</td>
+            <td>1</td>
+            <td><input type="number" id="coarseQuantity" name="coarseQuantity" class="quantity" /></td>
+            <td id="coarseTotalCost">0</td>
+        </tr>
+        <tr>
+            <td colSpan="3" align="right">Grand Total</td>
+            <td id="grandTotal"></td>
+        </tr>
+        <tr>
+        	<td colspan="4"><input type="button" value="Confirm" id="confirmButton" /></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
+
+
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#status").show();
+		$("#refresh").hide();
+
+
+		initWeb3();
+
+		$("#riceQuantity").keyup(function(){
+			var quantity = parseInt($(this).val());
+			if(!isNaN(quantity)){
+				$("#riceTotalCost").text(quantity * 3);
+			}
+			else{
+				$("#riceTotalCost").text("0");
+			}
+		});
+
+		$("#wheatQuantity").keyup(function(){
+			var quantity = parseInt($(this).val());
+			if(!isNaN(quantity)){
+				$("#wheatTotalCost").text(quantity * 2);
+			}
+			else{
+				$("#wheatTotalCost").text("0");
+			}
+		});
+
+		$("#coarseQuantity").keyup(function(){
+			var quantity = parseInt($(this).val());
+			if(!isNaN(quantity)){
+				$("#coarseTotalCost").text(quantity * 1);
+			}
+			else{
+				$("#coarseTotalCost").text("0");
+			}
+		});
+
+		$(".quantity").keyup(function(){
+			var total = parseInt($("#riceTotalCost").text()) + parseInt($("#wheatTotalCost").text()) + parseInt($("#coarseTotalCost").text());
+			$("#grandTotal").text(total);
+		});
+
+		$("#confirmButton").click(function(){
+			performTransaction();
+		});
+
+	});
+
+	var contract,web3,distributor;
+	var beneficiary = '0x2Fb5450D46267983331b42e49430bBF7474dB6d8';
+	    function initWeb3(){
+	        if (typeof web3 !== 'undefined') {
+	  				provider = web3.currentProvider;
+					provider.enable();
+					web3 = new Web3(provider);
+					web3.eth.getCoinbase((error,account)=>{
+						distributor = account;
+						initContract();
+					});
+			}
+	    }
+	    function initContract(){
+			$.getJSON('/static/build/contracts/Commodity.json',function(output){
+	            abi = output.abi;
+				contract = new web3.eth.Contract(abi,"0x88ba533e0b33f10b7153AF72479B1D095B89906a");
+				contract.events.BufferStatusChanged({},(err,result)=>{
+					contract.methods.distributors(distributor).call((error,res)=>{
+						$("#rice").text(res[0]);
+						$("#wheat").text(res[1]);
+						$("#coarse").text(res[2]);
+						
+						$("#status").show();
+						$("#refresh").hide();
+					});
+				});
+				getStatus();
+			});
+		}
+		function getStatus(){
+			contract.methods.distributors(distributor).call((error,res)=>{
+				$("#rice").text(res[0]);
+				$("#wheat").text(res[1]);
+				$("#coarse").text(res[2]);
+			});
+		}
+		function performTransaction(){
+			var riceAmount = parseInt($("#riceQuantity").val());
+			var wheatAmount = parseInt($("#wheatQuantity").val());
+			var coarseAmount = parseInt($("#coarseQuantity").val());
+			contract.methods.sell(beneficiary,riceAmount,wheatAmount,coarseAmount).send({from:distributor});
+			$("#status").hide();
+			$("#refresh").show();
+
+		}
+</script>
+</body>
+</html>
