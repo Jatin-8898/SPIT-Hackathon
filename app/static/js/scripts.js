@@ -1,12 +1,8 @@
-
-
-
-
 //window.alert("HELLO");
 
 /*VALIDATION FOR ADD USER FORM*/
 $(document).ready(function() {              //id of the form
-    $('#upload_docs').bootstrapValidator({              //options of validator
+    $('#aadhaarForm').bootstrapValidator({              //options of validator
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',            //icons
             invalid: 'glyphicon glyphicon-remove',
@@ -15,33 +11,16 @@ $(document).ready(function() {              //id of the form
         fields: {
        
 
-        doc_select: {
-            validators: {
-                    notEmpty: {
-                    message: 'Please select the type of the Document to be Uploaded'
-                }
+        continueButton: {
+            notEmpty: {
+                message: 'The aadhar number is required and cannot be empty'
+            },
+            stringLength: {
+                min: 12,
+                message: 'The aadhar number  must have at least 12 digits'
             }
-        },
-       
- 
-        doc: {
-            validators: {
-                file: {
-                        extension: 'jpeg,jpg,png,jfif,pdf,docx',
-                        type: 'application/pdf,application/docx',
-                        maxSize: 2048 * 1024,
-                        message: 'The selected file is not valid'
-                    },
-                notEmpty: {
-                    message: 'Document cannot be empty'
-                }
-            }
-        },    
-            
+        }
+          
         } 
     });
 });
-
-
-
-
