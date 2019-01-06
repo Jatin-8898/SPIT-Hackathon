@@ -277,7 +277,7 @@
             var riceAmount = parseInt($("#riceQuantity").val());
             var wheatAmount = parseInt($("#wheatQuantity").val());
             var coarseAmount = parseInt($("#coarseQuantity").val());
-            contract.methods.sell(beneficiary,"0x01","0x123456",riceAmount, wheatAmount, coarseAmount).send({
+            contract.methods.sell(beneficiary,"0x06","0x011413",riceAmount, wheatAmount, coarseAmount).send({
                 from: distributor
             });
             $("#status").hide();

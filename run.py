@@ -17,7 +17,8 @@ def index():
 			session['maxAmount'] = entitlement.maxAmount
 
 		return redirect(url_for('stock'))
-		
+
+	session.clear()
 	return render_template("index.html")
 
 
@@ -56,8 +57,6 @@ def stock():
 		session['rice'] = int(request.form['riceQuantity'])
 		session['wheat'] = int(request.form['wheatQuantity'])
 		session['coarse'] = int(request.form['coarseQuantity'])
-
-		session['']
 
 		if(total > session['maxAmount']):
 			flash("You are only allowed "+str(session['maxAmount'])+" KG")
