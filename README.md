@@ -1,0 +1,2 @@
+# SPIT-Hackathon
+SPIT hackathon

@@ -1,53 +1,93 @@
-<html>
-    <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="/static/js/web3.min.js"></script>
-    </head>
-    <body>
-        <button id="view">Click to View</button>
-        <div id="space"></div>
+{% extends 'includes/layout.html' %}
 
-        <script>
-            var beneficiary = '0x2Fb5450D46267983331b42e49430bBF7474dB6d8';
-            var distributor,contract;
-            function initWeb3(){
-                if (typeof web3 !== 'undefined') {
-                        provider = web3.currentProvider;
-                        provider.enable();
-                        web3 = new Web3(provider);
-                        web3.eth.getCoinbase((error,account)=>{
-                            distributor = account;
-                            initContract();
-                        });
-                }
-            }
 
-            function initContract(){
-                $.getJSON('/static/build/contracts/Commodity.json',function(output){
-                    abi = output.abi;
-                    contract = new web3.eth.Contract(abi,"0x88ba533e0b33f10b7153AF72479B1D095B89906a");
-                });
-            }
 
-            function getAllTransactions(){
-               
-            }
+{% block body %}
 
-            $(document).ready(function(){
-                initWeb3();
+<div class="sidebar">
+    <a class="" href="/">Home</a>
+    <a href="/">Stock</a>
+    <a href="/profile">Profile</a>
+    <a class="active" href="/getUsage">Check Usage</a>
+</div>
 
-                $("#view").click(function(){
-                    var entryCount;
-                    contract.methods.entryCount(beneficiary).call((error,res)=>{
-                        entryCount = res;
-                        for(var i = 0;i < entryCount;i++){
-                            contract.methods.beneficiaryData(beneficiary,i).call((error,res)=>{
-                                $("#space").append(res[4]);
-                            });
-                        }
-                    });
-                });
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="card p-3 mt-5 mx-auto">
+                <div class="card-body">
+                    <h2 class="text-center mb-5 text-dark">USAGE DETAILS</h2>
+                    <h4 class="text-dark">Name: {{ name }}</h4>
+                    <div class="row">
+                        <table class="table  table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Rice</th>
+                                    <th scope="col">Wheat</th>
+                                    <th scope="col">Coarse</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    var beneficiary = '0x2Fb5450D46267983331b42e49430bBF7474dB6d8';
+    var distributor, contract;
+
+    function initWeb3() {
+        if (typeof web3 !== 'undefined') {
+            provider = web3.currentProvider;
+            provider.enable();
+            web3 = new Web3(provider);
+            web3.eth.getCoinbase((error, account) => {
+                distributor = account;
+                initContract();
             });
-        </script>
-    </body>
-</html>
+        }
+    }
+
+    function initContract() {
+        $.getJSON('/static/build/contracts/Commodity.json', function (output) {
+            abi = output.abi;
+            contract = new web3.eth.Contract(abi, "0x88ba533e0b33f10b7153AF72479B1D095B89906a");
+
+            var entryCount;
+            contract.methods.entryCount(beneficiary).call((error, res) => {
+                entryCount = res;
+                for (var i = 0; i < entryCount; i++) {
+                    contract.methods.beneficiaryData(beneficiary, i).call((error, res) => {
+                        var date = parseInt(res[2], 16);
+                        var bytes = hexToBytes(res[3].substring(2, 8));
+                        var trElement = "<tr><td>" + date + "-" + bytes[0] + "-" +
+                            bytes[1] + "" + bytes[2] + "</td><td>" + res[4] +
+                            " kg</td><td>" + res[5] + " kg</td><td>" + res[6] +
+                            " kg</td></tr>";
+                        $("#tbody").append(trElement);
+                    });
+                }
+            });
+        });
+    }
+
+    function hexToBytes(hex) {
+        for (var bytes = [], c = 0; c < hex.length; c += 2)
+            bytes.push(parseInt(hex.substr(c, 2), 16));
+        return bytes;
+    }
+
+    $(document).ready(function () {
+        initWeb3();
+
+    });
+</script>
+{% endblock %}

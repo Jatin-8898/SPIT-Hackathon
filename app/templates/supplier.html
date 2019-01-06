@@ -1,0 +1,137 @@
+{% extends 'includes/layout.html' %}
+
+
+{% block body %}
+
+<div class="container">
+	<div class="row">
+		<div class="card p-3 mt-5 mx-auto">
+			<div class="card-body">
+				<h2 class="text-center mb-5 text-dark">SUPPLIER</h2>
+
+
+
+
+				<div class="row">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Details</th>
+								<th scope="col">Value</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Shop Number</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control quantity" type="text" id="shopNumber" name="shopNumber" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>Rice</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control quantity" type="number" id="riceQuantity" name="riceQuantity" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>Wheat</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>Coarse</td>
+								<td>
+									<div class="form-group">
+										<input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" />
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="1" align="right"></td>
+								<td colspan="1">
+									<input class="btn button button-3d nomargin " type="button" value="Allocate" id="allocateButton"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Do you want to Continue??</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<span>An OTP has been sent to your registered mobile number.</span>
+				<br>
+				<span>Kindly enter it below</span>
+
+				<div class="form-group">
+					<br>
+					<input type="number" name="" id="" class="form-control">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" id="buttonSubmit">Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		initWeb3();
+
+		$("#allocateButton").click(function(){
+			var shopNumber = $("#shopNumber").val();
+			var rice = $("#riceQuantity").val();
+			var wheat = $("#wheatQuantity").val();;
+			var coarse = $("#coarseQuantity").val();;
+			contract.methods.allocate(shopNumber,rice,wheat,coarse).send({from:admin});
+		});
+	});
+
+	var contract, web3, admin;
+	 function initWeb3() {
+            if (typeof web3 !== 'undefined') {
+                provider = web3.currentProvider;
+                provider.enable();
+                web3 = new Web3(provider);
+                web3.eth.getCoinbase((error, account) => {
+                    admin = account;
+                    initContract();
+                });
+            }
+        }
+
+		 function initContract() {
+            $.getJSON('/static/build/contracts/Commodity.json', function (output) {
+                abi = output.abi;
+                contract = new web3.eth.Contract(abi, "0x88ba533e0b33f10b7153AF72479B1D095B89906a");
+            });
+        }
+
+</script>
+
+{% endblock %}

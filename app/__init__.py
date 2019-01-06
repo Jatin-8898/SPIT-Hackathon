@@ -6,18 +6,18 @@ import socket
 
 pymysql.install_as_MySQLdb()
 
-totp = pyotp.TOTP("JBSWY3DPEHPK3PXP", interval=10)
+totp = pyotp.TOTP("JBSWY3DPEHPK3PXP")
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = "sarvesh"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://Jatin8898:kingjatin@localhost/aadhaar'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:sarvesh@localhost/aadhaar'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-HOST = "192.168.43.223"
-PORT = 6000
+#HOST = "192.168.43.223"
+#PORT = 6000
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((HOST, PORT))
+#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#sock.connect((HOST, PORT))
