@@ -12,6 +12,7 @@
 	<a href="/getUsage">Check Usage</a>
 </div>
 
+<form method="POST">
 <div class="content">
 	<div class="container">
 		<div class="row">
@@ -65,7 +66,10 @@
 									<td>3</td>
 									<td>
 										<div class="form-group">
-											<input class="form-control quantity" type="text" id="riceQuantity" name="riceQuantity" />
+											<input class="form-control quantity" type="text" id="riceQuantity" name="riceQuantity" 
+											{% if session['rice'] %}
+												value="{{ session['rice'] }}"
+											{% endif %} />
 										</div>
 									</td>
 									<td id="riceTotalCost">0</td>
@@ -76,7 +80,10 @@
 									<td>2</td>
 									<td>
 										<div class="form-group">
-											<input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
+											<input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity"
+											{% if session['wheat'] %}
+												value="{{ session['wheat'] }}"
+											{% endif %} />
 										</div>
 									</td>
 									<td id="wheatTotalCost">0</td>
@@ -87,7 +94,10 @@
 									<td>1</td>
 									<td>
 										<div class="form-group">
-											<input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" />
+											<input class="form-control quantity" type="number" id="coarseQuantity" name="coarseQuantity" 
+											{% if session['coarse'] %}
+												value="{{ session['coarse'] }}"
+											{% endif %}/>
 										</div>
 									</td>
 									<td id="coarseTotalCost">0</td>
@@ -97,11 +107,24 @@
 									<td id="grandTotal">0</td>
 								</tr>
 								<tr>
-									<td colspan="4" align="right"></td>
-									<td colspan="4">
-										<input class="btn  button button-3d nomargin" type="button" value="Purchase" id="confirmButton" data-toggle="modal"
+									<td colspan="4" align="right">
+										<input class="btn  button button-3d nomargin" type="submit" value="Confirm" id="confirmButton"  />
+									</td>
+									<td>
+										<input class="btn  button button-3d nomargin" value="Enter OTP" id="enterOTP" data-toggle="modal"
 										 data-target="#exampleModal" />
 									</td>
+								</tr>
+								<tr>
+								<td colspan="4">
+								{% with messages = get_flashed_messages() %}
+								{% if messages %}
+								{% for message in messages %}
+								<div class="alert alert-danger">{{ message }}</div>
+								{% endfor %}
+								{% endif %}
+								{% endwith %}
+								</td>
 								</tr>
 							</tbody>
 						</table>
@@ -111,7 +134,7 @@
 		</div>
 	</div>
 </div>
-
+</form>
 
 
 
@@ -132,15 +155,135 @@
 
 				<div class="form-group">
 					<br>
-					<input type="number" name="" id="" class="form-control">
+					<input type="number" name="" id="inputOtp" class="form-control">
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn button button-3d nomargin">Submit</button>
+				<button type="button" class="btn button button-3d nomargin" id="submitOtp">Submit</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function(){
+            $("#status").show();
+            $("#refresh").hide();
+
+
+            initWeb3();
+
+            $("#riceQuantity").keyup(function () {
+                var quantity = parseInt($(this).val());
+                if (!isNaN(quantity)) {
+                    $("#riceTotalCost").text(quantity * 3);
+                } else {
+                    $("#riceTotalCost").text("0");
+                }
+            });
+
+            $("#wheatQuantity").keyup(function () {
+                var quantity = parseInt($(this).val());
+                if (!isNaN(quantity)) {
+                    $("#wheatTotalCost").text(quantity * 2);
+                } else {
+                    $("#wheatTotalCost").text("0");
+                }
+            });
+
+            $("#coarseQuantity").keyup(function () {
+                var quantity = parseInt($(this).val());
+                if (!isNaN(quantity)) {
+                    $("#coarseTotalCost").text(quantity * 1);
+                } else {
+                    $("#coarseTotalCost").text("0");
+                }
+            });
+
+            $(".quantity").keyup(function () { 
+                var total = parseInt($("#riceTotalCost").text()) + parseInt($("#wheatTotalCost").text()) +
+                    parseInt($("#coarseTotalCost").text());
+                $("#grandTotal").text(total);
+            });
+
+				/*$("#confirmButton").click(function () {
+                $.get("/sendOtp",function(data,status){
+                    console.log(data);
+                });
+                //performTransaction();
+            });*/
+        
+            $("#submitOtp").click(function(){
+                var otp = $("#inputOtp").val();
+                 $.get("/verifyOtp/"+otp,function(data,status){
+                    //console.log(data);
+                    if(data === "True"){
+                        //$('#exampleModal').modal('hide');
+                        //$("#exampleModal").hide();
+                        performTransaction();
+                    }
+                    else{
+                        alert(data);
+                    }
+                });
+            });
+
+        });
+
+        var contract, web3, distributor;
+        var beneficiary = '0x2Fb5450D46267983331b42e49430bBF7474dB6d8';
+
+        function initWeb3() {
+            if (typeof web3 !== 'undefined') {
+                provider = web3.currentProvider;
+                provider.enable();
+                web3 = new Web3(provider);
+                web3.eth.getCoinbase((error, account) => {
+                    distributor = account;
+                    initContract();
+                });
+            }
+        }
+
+        function initContract() {
+            $.getJSON('/static/build/contracts/Commodity.json', function (output) {
+                abi = output.abi;
+                contract = new web3.eth.Contract(abi, "0x88ba533e0b33f10b7153AF72479B1D095B89906a");
+                contract.events.BufferStatusChanged({}, (err, result) => {
+                    contract.methods.distributors(distributor).call((error, res) => {
+                        $("#rice").text(res[0]);
+                        $("#wheat").text(res[1]);
+                        $("#coarse").text(res[2]);
+
+                        $("#status").show();
+                        $("#refresh").hide();
+                    });
+                });
+                getStatus();
+            });
+        }
+
+        function getStatus() {
+            contract.methods.distributors(distributor).call((error, res) => {
+                $("#rice").text(res[0]);
+                $("#wheat").text(res[1]);
+                $("#coarse").text(res[2]);
+            });
+        }
+
+        function performTransaction() {
+            var riceAmount = parseInt($("#riceQuantity").val());
+            var wheatAmount = parseInt($("#wheatQuantity").val());
+            var coarseAmount = parseInt($("#coarseQuantity").val());
+            contract.methods.sell(beneficiary,"0x06","0x011413",riceAmount, wheatAmount, coarseAmount).send({
+                from: distributor
+            });
+            $("#status").hide();
+            $("#refresh").show();
+
+        }
+    </script>
 
 {% endblock %}
