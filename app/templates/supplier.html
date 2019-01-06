@@ -33,7 +33,7 @@
 								<td>Rice</td>
 								<td>
 									<div class="form-group">
-										<input class="form-control quantity" type="number" id="wheatQuantity" name="wheatQuantity" />
+										<input class="form-control quantity" type="number" id="riceQuantity" name="riceQuantity" />
 									</div>
 								</td>
 							</tr>
@@ -57,8 +57,7 @@
 							<tr>
 								<td colspan="1" align="right"></td>
 								<td colspan="1">
-									<input class="btn button button-3d nomargin " type="button" value="Allocate" id="confirmButton" data-toggle="modal"
-									 data-target="#exampleModal" />
+									<input class="btn button button-3d nomargin " type="button" value="Allocate" id="allocateButton"/>
 								</td>
 							</tr>
 						</tbody>
@@ -94,10 +93,45 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Submit</button>
+				<button type="button" class="btn btn-primary" id="buttonSubmit">Submit</button>
 			</div>
 		</div>
 	</div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		initWeb3();
+
+		$("#allocateButton").click(function(){
+			var shopNumber = $("#shopNumber").val();
+			var rice = $("#riceQuantity").val();
+			var wheat = $("#wheatQuantity").val();;
+			var coarse = $("#coarseQuantity").val();;
+			contract.methods.allocate(shopNumber,rice,wheat,coarse).send({from:admin});
+		});
+	});
+
+	var contract, web3, admin;
+	 function initWeb3() {
+            if (typeof web3 !== 'undefined') {
+                provider = web3.currentProvider;
+                provider.enable();
+                web3 = new Web3(provider);
+                web3.eth.getCoinbase((error, account) => {
+                    admin = account;
+                    initContract();
+                });
+            }
+        }
+
+		 function initContract() {
+            $.getJSON('/static/build/contracts/Commodity.json', function (output) {
+                abi = output.abi;
+                contract = new web3.eth.Contract(abi, "0x88ba533e0b33f10b7153AF72479B1D095B89906a");
+            });
+        }
+
+</script>
 
 {% endblock %}
